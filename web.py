@@ -8,12 +8,9 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 
-
 app = Flask(__name__)
 
 urlbase = 'https://airtable.com/shrL8Ozj2HE2G8LEO?prefill_Which+dog+are+you+applying+for?='
-
-
 
 @app.route('/')
 def index():
@@ -74,4 +71,4 @@ def make_urls():
 if __name__ == '__main__':    
     Path('static/qrcodes').mkdir(parents=True,exist_ok=True)
     Path('static/zips').mkdir(parents=True,exist_ok=True)    
-    app.run(debug="True")
+    app.run()
