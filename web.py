@@ -10,6 +10,9 @@ from pathlib import Path
 
 app = Flask(__name__)
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app)
+
 urlbase = 'https://airtable.com/shrL8Ozj2HE2G8LEO?prefill_Which+dog+are+you+applying+for?='
 
 @app.route('/')
@@ -68,7 +71,7 @@ def make_urls():
     zfile.close()    
     return render_template('urls.html',petlist=petlist,zfile_url=zfile_url)
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     Path('static/qrcodes').mkdir(parents=True,exist_ok=True)
     Path('static/zips').mkdir(parents=True,exist_ok=True)    
     app.run()
