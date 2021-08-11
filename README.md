@@ -17,3 +17,5 @@ it will look something like this:
 ```
 
 Copy and paste the json from the above steps into the form or just use the make_urls python script to make urls and qr codes. The command line script isn't really up to date so you might have to make a few directories.
+
+This app is hosted at [http://urlmaker.hopeforpits.com:8000/](http://urlmaker.hopeforpits.com:8000/)
