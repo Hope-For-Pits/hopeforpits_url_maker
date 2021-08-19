@@ -51,6 +51,12 @@ urlbase = 'https://airtable.com/shrL8Ozj2HE2G8LEO?prefill_Which+dog+are+you+appl
 def index():
     html = """
     <h1>Hope For Pits URL Maker</h1>
+    <h2>new method (ultra janky)</h2>
+    <p>Just wait for a second, the textarea is already prepopulated with the json.</p>
+    <p>what makes this work is incredibly janky and I imagine that it probably needs to be refreshed every day, but it's working as of now.</p>
+    <p>Yes, I probably should just make it all happen in the background, but for some reason adding a new api endpoint and calling it from javascript seemed like the thing to do.</p>
+    <p>if you think this sucks, keep it to yourself, or bother me, idc.</p>
+    <h2>old method</h2>
     <p>To use the url maker you'll need to use chrome developer tool, if you're running chrome you can open with F12.</p>
     <p>Here's <a href="https://developer.chrome.com/docs/devtools/open/">a tutorial</a> on chrome dev tools if you're curious.</p>
     <p>Use chrome dev tools on <a href="https://airtable.com/shrL8Ozj2HE2G8LEO" target="_blank">adoption application page</a> to retrieve the response from GetRowsMatchingName GET request and paste it here.</p>
