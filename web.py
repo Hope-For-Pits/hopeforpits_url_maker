@@ -52,9 +52,11 @@ def index():
     html = """
     <h1>Hope For Pits URL Maker</h1>
     <h2>new method (ultra janky)</h2>
-    <p>Just wait for a second, the textarea is already prepopulated with the json.</p>
-    <p>what makes this work is incredibly janky and I imagine that it probably needs to be refreshed every day, but it's working as of now.</p>
-    <p>Yes, I probably should just make it all happen in the background, but for some reason adding a new api endpoint and calling it from javascript seemed like the thing to do.</p>
+    <p>Just wait for a second, the textarea is already prepopulated with the json. 
+        what makes this work is incredibly janky and I imagine that it probably needs
+        to be refreshed every day, but it's working as of now. Yes, I probably should 
+        just make it all happen in the background, but for some reason adding a new api
+        endpoint and calling it from javascript seemed like the thing to do.</p>
     <p>if you think this sucks, keep it to yourself, or bother me, idc.</p>
     <h2>old method</h2>
     <p>To use the url maker you'll need to use chrome developer tool, if you're running chrome you can open with F12.</p>
