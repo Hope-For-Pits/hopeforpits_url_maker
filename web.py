@@ -1,4 +1,5 @@
-import subprocess
+import os, zlib, base64, subprocess
+import cryptocode
 from flask import Flask
 from flask import request
 from flask import send_file
@@ -14,36 +15,10 @@ app = Flask(__name__)
 from werkzeug.middleware.proxy_fix import ProxyFix
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
-# I'm sure this won't last more than an hour or so
-curlcommand = """curl -s 'https://airtable.com/v0.3/table/tblb028UTUaTbH8TE/getRowsMatchingName' \
-  -H 'Connection: keep-alive' \
-  -H 'Pragma: no-cache' \
-  -H 'Cache-Control: no-cache' \
-  -H 'sec-ch-ua: "Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"' \
-  -H 'DNT: 1' \
-  -H 'x-time-zone: America/New_York' \
-  -H 'X-Requested-With: XMLHttpRequest' \
-  -H 'x-airtable-page-load-id: pgl2i7GnGxZzEuRxF' \
-  -H 'x-airtable-application-id: appFN3sh7XBSEoYHt' \
-  -H 'ot-tracer-sampled: true' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36' \
-  -H 'x-airtable-inter-service-client: webClient' \
-  -H 'ot-tracer-traceid: 0673072f047f8f0f' \
-  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
-  -H 'x-airtable-inter-service-client-code-version: 62d524ac8f5a360c12823a4941c191e60f3313c8' \
-  -H 'x-user-locale: en' \
-  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
-  -H 'ot-tracer-spanid: 3fa6d6f03c2a46e2' \
-  -H 'Origin: https://airtable.com' \
-  -H 'Sec-Fetch-Site: same-origin' \
-  -H 'Sec-Fetch-Mode: cors' \
-  -H 'Sec-Fetch-Dest: empty' \
-  -H 'Accept-Language: en-US,en;q=0.9' \
-  -H 'Cookie: brw=brwrrLG5K7xfpdeBA; optimizelyEndUserId=oeu1626128817776r0.18929413231649161; 8gma29=1; _ga=GA1.2.1700923836.1626128819; amplitude_idairtable.com=eyJkZXZpY2VJZCI6IjY1MTYxZGZkLTYxMGEtNGU3OC05NTNkLWQ1YWJjYWRkMDU5ZFIiLCJ1c2VySWQiOm51bGwsIm9wdE91dCI6ZmFsc2UsInNlc3Npb25JZCI6MTYyNjEyODgxOTIyNywibGFzdEV2ZW50VGltZSI6MTYyNjEyODgxOTIzOCwiZXZlbnRJZCI6MSwiaWRlbnRpZnlJZCI6Miwic2VxdWVuY2VOdW1iZXIiOjN9; _mkto_trk=id:458-JHQ-131&token:_mch-airtable.com-1626128819706-51359; _fbp=fb.1.1626128819751.754215499; intercom-id-wb1whb4b=bd26e1ad-7f95-4bd9-9594-8da4b38ac37d; fs_uid=rs.fullstory.com#113G8Y#5043310136336384:5561862677274624/1657664834; phg=0; __Host-airtable-session=eyJzZXNzaW9uSWQiOiJzZXNjMXlKV1pYd3ZjVDZYYSIsImNzcmZTZWNyZXQiOiI2a2JLdC1nTU9SX0pOeElXcE1pWV9paGMiLCJoaWdoU2VjdXJpdHlNb2RlRW5hYmxlZFRpbWUiOjE2MjYxMjg4NDIwNDcsInVzZXJJZCI6InVzcmJXa3BQaHd1eHBqZERZIn0=; __Host-airtable-session.sig=gGtcA0sFR2S5Ve9hP1vV0pKA3V2ICeO1XRmxSTJYqGY; __zlcmid=152kAtF5EOOcxN5; AWSELB=F5E9CFCB0C87D62DB5D03914FDC2A2D2D45FBECE92075869B3F7F698D732FCC7347AFF1CEA0BC1262B9940A7DF1D234855648842F3FE238CDB5BAF086C42E42BDECC69CACA; AWSELBCORS=F5E9CFCB0C87D62DB5D03914FDC2A2D2D45FBECE92075869B3F7F698D732FCC7347AFF1CEA0BC1262B9940A7DF1D234855648842F3FE238CDB5BAF086C42E42BDECC69CACA; lightstep_guid%2FsharedViewOrApp=61c28f784874ee26; lightstep_session_id=12a8ac782e3c1716; mv=eyJzdGFydFRpbWUiOiIyMDIxLTA4LTE5VDA0OjUzOjU1Ljk1MloiLCJsb2NhdGlvbiI6Imh0dHBzOi8vYWlydGFibGUuY29tL3Nockw4T3oqKioqKioqKioqIiwiaW50ZXJuYWxUcmFjZUlkIjoidHJjVUt1MXVDQ0tybnI1RWoifQ==; mbpg=2022-08-19T04:54:23.238ZusrbWkpPhwuxpjdDYpro; mbpg.sig=ndk7STImdQpLFMhsWibwkFog7Ld68TKHVPRw9TF_coQ' \
-  --data-raw 'stringifiedObjectParams=%7B%22rowName%22%3A%22%22%2C%22limit%22%3A1000%2C%22offset%22%3A0%2C%22columnLimit%22%3A7%2C%22rowIdsToIgnore%22%3A%5B%5D%2C%22viewIdForRecordSelection%22%3A%22viwo2LKvCNjeIMqG4%22%2C%22includeColumnData%22%3Atrue%2C%22returnOnlyPrimaryColumn%22%3Atrue%7D&requestId=reqv47PJEheCPGovh&accessPolicy=%7B%22allowedActions%22%3A%5B%7B%22modelClassName%22%3A%22view%22%2C%22modelIdSelector%22%3A%22viwSDbNSkuMSt0jxT%22%2C%22action%22%3A%22readSharedFormData%22%7D%2C%7B%22modelClassName%22%3A%22view%22%2C%22modelIdSelector%22%3A%22viwSDbNSkuMSt0jxT%22%2C%22action%22%3A%22submitSharedForm%22%7D%2C%7B%22modelClassName%22%3A%22application%22%2C%22modelIdSelector%22%3A%22appFN3sh7XBSEoYHt%22%2C%22action%22%3A%22createAttachmentUploadS3Policies%22%7D%2C%7B%22modelClassName%22%3A%22table%22%2C%22modelIdSelector%22%3A%22tblb028UTUaTbH8TE%22%2C%22action%22%3A%22getRowsMatchingName%22%2C%22actionArguments%22%3A%7B%22returnOnlyPrimaryColumn%22%3Atrue%2C%22viewIdForRecordSelection%22%3A%22viwo2LKvCNjeIMqG4%22%7D%7D%2C%7B%22modelClassName%22%3A%22table%22%2C%22modelIdSelector%22%3A%22tblb028UTUaTbH8TE%22%2C%22action%22%3A%22readDataForRowCards%22%2C%22actionArguments%22%3A%7B%22returnOnlyPrimaryColumn%22%3Atrue%7D%7D%5D%2C%22shareId%22%3A%22shrL8Ozj2HE2G8LEO%22%2C%22applicationId%22%3A%22appFN3sh7XBSEoYHt%22%2C%22sessionId%22%3A%22sesc1yJWZXwvcT6Xa%22%2C%22generationNumber%22%3A0%2C%22signature%22%3A%22a323d2dc7a46804fdadca53597dafc6645e856d9b60c22556e36fb7ccead4e75%22%7D' \
-  --compressed
-"""
+curlcommand = "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*+ogdWOKs8LlLsFbGrm6vnw==*1mHfn06LW1A37XU5/wS0Gw==*YJSrDbyh80Eux1aWJhJLfw=="
+key = os.environ['CURL_KEY']
+curldec = cryptocode.decrypt(curlcommand,key)
+curlcmd = zlib.decompress(base64.b64decode(curldec)).decode()
 
 urlbase = 'https://airtable.com/shrL8Ozj2HE2G8LEO?prefill_Which+dog+are+you+applying+for?='
 
@@ -94,7 +69,7 @@ def index():
 
 @app.route("/get/curl")
 def get_curl():
-    status, output = subprocess.getstatusoutput(curlcommand)
+    status, output = subprocess.getstatusoutput(curlcmd)
     del status
     return output
 
