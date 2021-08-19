@@ -1,44 +1,49 @@
 <head>
     <title>Hope For Pits Adoption URLs</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.1.1/dist/css/bootstrap.css">
 </head>
 <body>
-    <h1>Hope For Pits Adoption URLs</h1>
-    <p><a href="{{zfile_url}}">Download all as zipfile</a></p>
+    <div class="container">
+
     
-    {% for item in petlist %}
-    <table>
-        <tr>
-            <td>
-                Name:</td>
-            <td>
-                {{ item['name'] }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                ID:
-            </td>
-            <td>
-                {{ item['id'] }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                URL:                
-            </td>
-            <td>
-                <a href="{{ item['url'] }}">{{ item['url'] }}</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                QR Image:
-            </td>
-            <td>
-                <a href="{{ item['qrurl'] }}"><img src="{{ item['qrurl'] }}" width="200px"></img></a>
-            </td>
-        </tr>    
-    {% endfor %}
-    
+        <h1>Hope For Pits Adoption URLs</h1>
+        <p><a href="{{zfile_url}}">Download all as zipfile</a></p>
+        
+        {% for item in petlist %}
+        <table>
+            <tr>
+                <td>
+                    Name:</td>
+                <td>
+                    {{ item['name'] }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    ID:
+                </td>
+                <td>
+                    {{ item['id'] }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    URL:                
+                </td>
+                <td>
+                    <a href="{{ item['url'] }}">{{ item['url'] }}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    QR Image:
+                </td>
+                <td>
+                    <a href="{{ item['qrurl'] }}"><img src="{{ item['qrurl'] }}" width="200px"></img></a>
+                </td>
+            </tr>    
+        {% endfor %}
+        </table>
+    </div>    
     
 </body>
