@@ -4,6 +4,13 @@ Little project for making prefilled adoption application urls so we can add to G
 
 ## Usage
 
+## update
+
+I've implemented a curl command that does most of the gnarly stuff below for us.
+Right now just need to click submit, values will be automatically populated.
+
+## old usage
+
 To use the url maker you'll need to use chrome developer tool, if you're running chrome you can open with F12.
 
 Here's [a tutorial](https://developer.chrome.com/docs/devtools/open/) on chrome dev tools if you're curious.
