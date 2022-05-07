@@ -1,4 +1,4 @@
-import os, zlib, base64, subprocess
+import os, zlib, base64, subprocess, csv
 import cryptocode
 from flask import Flask
 from flask import request
@@ -9,6 +9,8 @@ import qrcode
 import zipfile
 from datetime import datetime
 from pathlib import Path
+import pandas as pd
+import doc
 
 app = Flask(__name__)
 
@@ -70,13 +72,23 @@ def index():
 
 @app.route("/get/curl")
 def get_curl():
-    status, output = subprocess.getstatusoutput(curlcmd)
+    status, output = subprocess.getstatusoutput(curlcommand)
     del status
     return output
 
 @app.route("/get/<filename>")
 def get_file(filename):
     return send_file(filename)
+
+@app.route('/make/contract', methods=["POST"])
+def make_contract():
+    rdata = request.get_json(force=True)
+    print(rdata)
+    petname = rdata['Pet']
+    pl = pd.read_csv('pl.csv')
+    petdata = pl.loc[pl['name']==petname]
+    print(petdata['gender'])
+    return petdata.to_json()
 
 @app.route("/make_urls", methods=["POST"])
 def make_urls():
