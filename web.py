@@ -82,13 +82,14 @@ def get_file(filename):
 
 @app.route('/make/contract', methods=["POST"])
 def make_contract():
-    rdata = request.get_json(force=True)
-    print(rdata)
+    rdata = request.get_json(force=True)    
     petname = rdata['Pet']
     pl = pd.read_csv('pl.csv')
-    petdata = pl.loc[pl['name']==petname]
-    print(petdata['gender'])
-    return petdata.to_json()
+    petdata = pl.loc[pl['name']==petname]    
+    rdata['petdata'] = petdata
+    fname = doc.generate_doc(rdata)
+    url = 'http://urlmaker.hopeforpits.com:8000/' + fname.split('./')[-1]
+    return {'filename':url}
 
 @app.route("/make_urls", methods=["POST"])
 def make_urls():
