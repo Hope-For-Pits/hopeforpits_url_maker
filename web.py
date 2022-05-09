@@ -88,7 +88,7 @@ def make_contract():
     petdata = pl.loc[pl['name']==petname]    
     rdata['petdata'] = petdata
     fname = doc.generate_doc(rdata)
-    url = 'http://urlmaker.hopeforpits.com:8000/' + fname.split('./')[-1]
+    url = 'https://urlmaker.hopeforpits.com:8000/' + fname.split('./')[-1]
     return {'filename':url}
 
 @app.route("/make_urls", methods=["POST"])
